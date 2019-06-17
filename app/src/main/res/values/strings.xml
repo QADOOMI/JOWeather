@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">JOWeather</string>
+    <string name="city_image_transition_text">shared_city_image</string>
+    <string name="no_internet_connection_text">No internet connection.</string>
+    <string name="kelo_m_text">km/h</string>
+    <string name="per_cent_text">%</string>
+    <string name="celicus_text">\u2103</string>
+    <string name="desc_label_text">In General</string>
+    <string name="city_image">city image</string>
+    <string name="weather_icon">weather icon</string>
+
+</resources>
