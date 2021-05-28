@@ -11,28 +11,27 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.MainActivity;
-import com.example.WeatherDetailsActivity;
+import com.example.database.model.Clouds;
+import com.example.database.model.Main;
+import com.example.database.model.Wind;
 import com.example.joweather.R;
+import com.example.model.City;
+import com.example.model.WeatherItem;
+import com.example.views.MainActivity;
+import com.example.views.WeatherDetailsActivity;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import internet.InternetChecker;
-import weather.structure.Clouds;
-import weather.structure.Main;
-import weather.structure.Wind;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
@@ -84,31 +83,23 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         if (isCityAdapter()) {
             City city = cities.get(position);
             animateItems(holder.cityCard);
-            new Thread(() ->
-                    holder.image.post(() ->
-                            holder.image.setImageDrawable(context.getResources().getDrawable(city.getImage()))
-                    )).start();
+            holder.image.post(() ->
+                    holder.image.setImageDrawable(ContextCompat.getDrawable(context, city.getImage()))
+            );
 
             holder.name.setText(city.getName());
             holder.cityCard.setOnClickListener((View view) -> {
-                try {
-                    if (new InternetChecker().execute(context).get()) {
-                        // determine the shared element to animate
-                        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                (Activity) context
-                                , Pair.create(holder.image, context.getResources().getString(R.string.city_image_transition_text)));
+                // determine the shared element to animate
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        (Activity) context
+                        , Pair.create(holder.image, context.getResources().getString(R.string.city_image_transition_text)));
 
-                        Intent goToWeather = new Intent((MainActivity) context, WeatherDetailsActivity.class);
-                        goToWeather.putExtra(City.class.getSimpleName(), city.getImage());
-                        goToWeather.putExtra(City.CitiesConstants.REQUESTED_CITY, city.getName());
+                Intent goToWeather = new Intent((MainActivity) context, WeatherDetailsActivity.class);
+                goToWeather.putExtra(City.class.getSimpleName(), city.getImage());
+                goToWeather.putExtra(City.Constants.REQUESTED_CITY, city.getName());
 
-                        context.startActivity(goToWeather, optionsCompat.toBundle());
-                    } else {
-                        Toast.makeText(context, context.getResources().getString(R.string.no_internet_connection_text), Toast.LENGTH_LONG).show();
-                    }
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                context.startActivity(goToWeather, optionsCompat.toBundle());
+
             });
         } else {
             WeatherItem weatherItem = weatherInfo.get(position);

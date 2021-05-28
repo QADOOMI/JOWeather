@@ -1,33 +1,16 @@
 package weather.view.presenter;
 
-import android.os.AsyncTask;
-import android.os.Looper;
-import android.util.Log;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 import callbacks.CallBack;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import io.realm.Realm;
-import recyclerview.City;
-import retrofit.handling.RetrofitClient;
-import retrofit.handling.WeatherService;
-import weather.realm.RealmCreator;
-import weather.structure.IRealmWeatherBuilder;
-import weather.structure.RealmWeather;
 
-public class WeatherModel extends AsyncTask<CallBack, Void, Void> implements IContacter.IModel{
+import com.example.model.City;
+
+public class WeatherModel /*extends AsyncTask<CallBack, Void, Void> */implements IContacter.IModel{
 
     // for debug purposes
     private static final String TAG = WeatherModel.class.getSimpleName();
     // the api key for connecting to my API subscription
-    private final static String API_KEY = "02f3efe3cdf397ad6b96ad5b64d273d8";
     /*
      * coord sorted in the array with latitude then longtitude
      * store the city coordinates
@@ -56,30 +39,15 @@ public class WeatherModel extends AsyncTask<CallBack, Void, Void> implements ICo
     @Override
     public ArrayList<City> loadWeatherData(CallBack weatherDataSender) {
 
-        this.execute(weatherDataSender);
+       // this.execute(weatherDataSender);
 
         return null;
     }
 
 
-    @Override
+ /*   @Override
     protected void onPreExecute() throws IllegalStateException {
-        switch (requestedCity) {
-            case "Amman":
-                coords = City.CitiesConstants.citiesCoord.get(City.CitiesConstants.AMMAN);
-                cityId = City.CitiesConstants.AMMAN_ID;
-                return;
-            case "Irbid":
-                coords = City.CitiesConstants.citiesCoord.get(City.CitiesConstants.IRBID);
-                cityId = City.CitiesConstants.IRBID_ID;
-                return;
-            case "Aqaba":
-                coords = City.CitiesConstants.citiesCoord.get(City.CitiesConstants.AQABA);
-                cityId = City.CitiesConstants.AQABA_ID;
-                return;
-            default:
-                String message = "No such city available yet.";
-        }
+
     }
 
     @Override
@@ -96,7 +64,7 @@ public class WeatherModel extends AsyncTask<CallBack, Void, Void> implements ICo
                             Log.e(TAG, "doInBackground: \n" + weatherData);
 
                             weatherDataSender[0].sendWeatherData(weatherData);
-                            String nowDate = null;
+                            long nowDate = null;
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                                 nowDate = LocalDate.parse(LocalDate.now().toString(), DateTimeFormatter.ofPattern("yyyy/MM/dd")).toString();
                             } else {
@@ -106,7 +74,7 @@ public class WeatherModel extends AsyncTask<CallBack, Void, Void> implements ICo
 
                             }
 
-                            RealmWeather realmWeatherData = new IRealmWeatherBuilder.RealmWeatherBuilder()
+                            RealmWeather realmWeatherData = new IRealmWeatherBuilder.RealmWeatherBuilder(weatherData)
                                     .withId(weatherData.getId())
                                     .withDescription(weatherData.getWeather().get(0).getDescription())
                                     .withWindSpeed(weatherData.getWind().getSpeed())
@@ -141,5 +109,5 @@ public class WeatherModel extends AsyncTask<CallBack, Void, Void> implements ICo
         coords = null;
 
         return null;
-    }
+    }*/
 }

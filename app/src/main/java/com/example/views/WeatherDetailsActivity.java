@@ -1,4 +1,4 @@
-package com.example;
+package com.example.views;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,13 +19,13 @@ import com.example.joweather.R;
 import java.util.ArrayList;
 
 import recyclerview.Adapter;
-import recyclerview.City;
-import recyclerview.WeatherItem;
-import weather.realm.RealmCreator;
-import weather.structure.Clouds;
-import weather.structure.Main;
-import weather.structure.WeatherResponse;
-import weather.structure.Wind;
+import com.example.model.City;
+import com.example.model.WeatherItem;
+import com.example.database.realm.RealmCreator;
+import com.example.database.model.Clouds;
+import com.example.database.model.Main;
+import com.example.database.model.WeatherResponse;
+import com.example.database.model.Wind;
 import weather.view.presenter.IContacter;
 import weather.view.presenter.WeatherPresenter;
 
@@ -61,7 +61,7 @@ public class WeatherDetailsActivity extends AppCompatActivity implements IContac
                             ))).start();
             IContacter.IPresenter weatherPresenter =
                     new WeatherPresenter(this, getIntent().getExtras().getString(
-                            City.CitiesConstants.REQUESTED_CITY));
+                            City.Constants.REQUESTED_CITY));
             weatherPresenter.onWeatherDataLoaded();
         } else {
             Log.e(TAG, "onCreate -> WeatherDetailsActivity: getIntent() is null");

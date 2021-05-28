@@ -9,13 +9,14 @@
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
+        android:name="app.WeatherApp"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:roundIcon="@mipmap/logo_1"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.example.MainActivity">
+        <activity android:name="com.example.views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.example.WeatherDetailsActivity" />
+        <activity android:name="com.example.views.WeatherDetailsActivity" />
 
     </application>
 

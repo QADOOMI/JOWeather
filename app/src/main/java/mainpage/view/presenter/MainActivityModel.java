@@ -5,7 +5,7 @@ import com.example.joweather.R;
 import java.util.ArrayList;
 
 import callbacks.CallBack;
-import recyclerview.City;
+import com.example.model.City;
 import weather.view.presenter.IContacter;
 
 public class MainActivityModel implements IContacter.IModel{
@@ -21,9 +21,9 @@ public class MainActivityModel implements IContacter.IModel{
     public ArrayList<City> loadWeatherData(CallBack weatherDataSender) {
         ArrayList<City> cities = new ArrayList<>();
 
-        cities.add(new City(City.CitiesConstants.AMMAN, R.drawable.amman));
-        cities.add(new City(City.CitiesConstants.IRBID, R.drawable.irbid));
-        cities.add(new City(City.CitiesConstants.AQABA, R.drawable.aqaba));
+        cities.add(new City(City.Constants.AMMAN, R.drawable.amman));
+        cities.add(new City(City.Constants.IRBID, R.drawable.irbid));
+        cities.add(new City(City.Constants.AQABA, R.drawable.aqaba));
 
         return cities;
 

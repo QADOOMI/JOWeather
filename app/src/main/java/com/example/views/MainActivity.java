@@ -1,9 +1,10 @@
-package com.example;
+package com.example.views;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,15 +12,15 @@ import com.example.joweather.R;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
-import mainpage.view.presenter.MainActivityPresenter;
+import com.example.viewmodel.JoWeatherViewModel;
 import recyclerview.Adapter;
-import recyclerview.City;
+import com.example.model.City;
 import weather.view.presenter.IContacter;
 
 public class MainActivity extends AppCompatActivity implements IContacter.IMainView{
 
     private RecyclerView citiesList;
+    private JoWeatherViewModel joViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +28,16 @@ public class MainActivity extends AppCompatActivity implements IContacter.IMainV
         setContentView(R.layout.activity_main);
 
         // instanstaite Realm database application
-        Realm.init(getApplicationContext());
 
         initViews();
 
         // getting data from API and saving to database
-        IContacter.IPresenter presenter = new MainActivityPresenter(this);
-        presenter.onWeatherDataLoaded();
+
+     /*  joViewModel = ViewModelProvider.AndroidViewModelFactory
+                .getInstance(getApplication())
+                .create(JoWeatherViewModel.class);
+
+        joViewModel.loadAndSaveWeatherInfo();*/
 
 
     }

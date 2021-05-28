@@ -3,8 +3,8 @@ package weather.view.presenter;
 import java.util.ArrayList;
 
 import callbacks.CallBack;
-import recyclerview.City;
-import weather.structure.WeatherResponse;
+import com.example.model.City;
+import com.example.database.model.WeatherResponse;
 
 public interface IContacter {
 

@@ -1,4 +1,4 @@
-package weather.structure;
+package com.example.database.model;
 
 public interface GeneralWeather {
 }

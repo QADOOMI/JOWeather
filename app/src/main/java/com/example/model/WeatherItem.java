@@ -1,7 +1,7 @@
-package recyclerview;
+package com.example.model;
 
 
-import weather.structure.GeneralWeather;
+import com.example.database.model.GeneralWeather;
 
 public class WeatherItem {
 

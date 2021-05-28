@@ -1,6 +1,6 @@
 package callbacks;
 
-import weather.structure.WeatherResponse;
+import com.example.database.model.WeatherResponse;
 
 public interface CallBack {
     void sendWeatherData(WeatherResponse weatherResponse);

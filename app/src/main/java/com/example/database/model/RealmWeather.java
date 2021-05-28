@@ -1,4 +1,4 @@
-package weather.structure;
+package com.example.database.model;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -19,7 +19,7 @@ public class RealmWeather extends RealmObject {
     @Required
     private String cloud;
 
-    // main
+    // main temp
     private double temp;
     @Required
     private String pressure;
@@ -31,8 +31,7 @@ public class RealmWeather extends RealmObject {
     private String cityName;
 
     // date of weather taken
-    @Required
-    private String weatherDate;
+    private long weatherDate;
 
     // coordination
     private double lat;
@@ -81,7 +80,7 @@ public class RealmWeather extends RealmObject {
         return cityName;
     }
 
-    public String getWeatherDate() {
+    public long getWeatherDate() {
         return weatherDate;
     }
 
@@ -141,7 +140,7 @@ public class RealmWeather extends RealmObject {
         this.cityName = cityName;
     }
 
-    public void setWeatherDate(String weatherDate) {
+    public void setWeatherDate(long weatherDate) {
         this.weatherDate = weatherDate;
     }
 
@@ -151,5 +150,45 @@ public class RealmWeather extends RealmObject {
 
     public void setLon(double lon) {
         this.lon = lon;
+    }
+
+    public boolean isEmpty() {
+        return cloud == null && humidty == 0.0 && temp == 0.0;
+    }
+
+    public void updateWithNewValues(RealmWeather realmModel) {
+        this.lon = realmModel.getLon();
+        this.lat = realmModel.getLat();
+        this.temp = realmModel.getTemp();
+        this.humidty = realmModel.getHumidty();
+        this.cityName = realmModel.getCityName();
+        this.cloud = realmModel.getCloud();
+        this.deg = realmModel.getDeg();
+        this.description = realmModel.getDescription();
+        this.maxTemp = realmModel.getMaxTemp();
+        this.minTemp = realmModel.getMinTemp();
+        this.pressure = realmModel.getPressure();
+        this.speed = realmModel.getSpeed();
+        this.weatherDate = realmModel.getWeatherDate();
+    }
+
+    @Override
+    public String toString() {
+        return "RealmWeather{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", speed=" + speed +
+                ", deg=" + deg +
+                ", cloud='" + cloud + '\'' +
+                ", temp=" + temp +
+                ", pressure='" + pressure + '\'' +
+                ", humidty=" + humidty +
+                ", minTemp=" + minTemp +
+                ", maxTemp=" + maxTemp +
+                ", cityName='" + cityName + '\'' +
+                ", weatherDate=" + weatherDate +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                '}';
     }
 }
