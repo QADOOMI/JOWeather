@@ -7,27 +7,27 @@ import java.util.List;
 
 public interface DataSourceController {
 
-    interface LocalController {
-        default void onLocalSourceError(Throwable throwable) {
+    default void onLocalSourceError(Throwable throwable) {
 
-        }
-
-        default void onMultipleWeatherInserted() {
-
-        }
-
-        default void newWeatherInfoInserted(RealmWeather realmModel) {
-
-        }
-
-        default void weatherInfoFetched(RealmWeather realmWeather) {
-
-        }
     }
 
-    interface RemoteController {
-        void onRemoteSourceError(Throwable throwable);
+    default void onMultipleWeatherInserted() {
 
-        void onCitiesWeatherFetched(List<WeatherResponse> weatherResponses);
+    }
+
+    default void newWeatherInfoInserted(RealmWeather realmModel) {
+
+    }
+
+    default void weatherInfoFetched(RealmWeather realmWeather) {
+
+    }
+
+    default void onRemoteSourceError(Throwable throwable) {
+
+    }
+
+    default void onCitiesWeatherFetched(List<WeatherResponse> weatherResponses) {
+
     }
 }

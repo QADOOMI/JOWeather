@@ -88,7 +88,6 @@ public class WeatherDetailsActivity extends AppCompatActivity implements IContac
         infoList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
 
-
     /**
      * receive city weather data from(Model unit)
      *

@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.database.model.RealmWeather;
 import com.example.database.model.WeatherResponse;
-import com.example.remoteds.RemoteDataSource;
+import com.example.repo.WeatherRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +17,11 @@ import app.WeatherApp;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class JoWeatherViewModel extends AndroidViewModel
-        implements DataSourceController.LocalController, DataSourceController.RemoteController {
+        implements DataSourceController {
 
     private final CompositeDisposable subscribers = new CompositeDisposable();
 
-    private final MutableLiveData<ArrayList<RealmWeather>> cityWeather = new MutableLiveData<ArrayList<RealmWeather>>() {{
-        setValue(new ArrayList<>());
-    }};
-
-    private RemoteDataSource remoteDataSource;
+    private WeatherRepository repository;
 
     private static volatile JoWeatherViewModel INSTANCE;
 
@@ -33,7 +29,7 @@ public class JoWeatherViewModel extends AndroidViewModel
 
     public JoWeatherViewModel(@NonNull WeatherApp application) {
         super(application);
-        remoteDataSource = RemoteDataSource.getInstance(this);
+        repository = WeatherRepository.getInstance(this);
     }
 
     public static JoWeatherViewModel getInstance(WeatherApp app) {
@@ -56,7 +52,7 @@ public class JoWeatherViewModel extends AndroidViewModel
 
     public void loadAndSaveWeatherInfo() {
         Log.e(TAG, "loadAndSaveWeatherInfo: fetching weather cast info...");
-        subscribers.add(remoteDataSource.loadAndSaveWeatherInfo());
+        subscribers.add(repository.loadAndSaveWeatherInfo());
     }
 
     @Override
@@ -74,26 +70,10 @@ public class JoWeatherViewModel extends AndroidViewModel
         Log.e(TAG, "onWeatherInserted: ");
     }
 
-    @Override
-    public void newWeatherInfoInserted(RealmWeather realmModel) {
-        Log.e(TAG, "newWeatherInfoInserted: " + realmModel.toString());
-        for (RealmWeather weather : cityWeather.getValue())
-            if (realmModel.getId() == weather.getId()) {
-                weather.updateWithNewValues(realmModel);
-                cityWeather.setValue(cityWeather.getValue());
-            }
-    }
-
-    @Override // local data source
-    public void weatherInfoFetched(RealmWeather realmWeather) {
-        Log.e(TAG, "weatherInfoFetched: " + realmWeather.toString());
-        cityWeather.getValue()
-                .add(realmWeather);
-        cityWeather.postValue(cityWeather.getValue());
-    }
 
     @Override // remote data source
     public void onCitiesWeatherFetched(List<WeatherResponse> weatherResponses) {
         Log.e(TAG, "onCitiesWeatherFetched: " + weatherResponses.toString());
     }
+
 }

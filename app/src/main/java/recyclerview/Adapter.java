@@ -59,9 +59,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         // determine the type of layuot
         if (isCityAdapter()) {
             this.cities = (ArrayList<City>) data;
-            layout = R.layout.city_item;
+            layout = R.layout.city_item_layout;
         } else {
-            layout = R.layout.weather_data_item;
+            layout = R.layout.weather_data_item_layout;
             this.weatherInfo = (ArrayList<WeatherItem>) data;
         }
     }
@@ -81,26 +81,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     // for updating the UI with data in ArrayList based on the type
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (isCityAdapter()) {
-            City city = cities.get(position);
-            animateItems(holder.cityCard);
-            holder.image.post(() ->
-                    holder.image.setImageDrawable(ContextCompat.getDrawable(context, city.getImage()))
-            );
 
-            holder.name.setText(city.getName());
-            holder.cityCard.setOnClickListener((View view) -> {
-                // determine the shared element to animate
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        (Activity) context
-                        , Pair.create(holder.image, context.getResources().getString(R.string.city_image_transition_text)));
-
-                Intent goToWeather = new Intent((MainActivity) context, WeatherDetailsActivity.class);
-                goToWeather.putExtra(City.class.getSimpleName(), city.getImage());
-                goToWeather.putExtra(City.Constants.REQUESTED_CITY, city.getName());
-
-                context.startActivity(goToWeather, optionsCompat.toBundle());
-
-            });
         } else {
             WeatherItem weatherItem = weatherInfo.get(position);
             animateItems(holder.weatherDataLayout);
@@ -212,7 +193,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             super(view);
 
             if (isCityAdapter()) {
-                progressBar = view.findViewById(R.id.city_image_loader);
                 image = view.findViewById(R.id.city_image);
                 name = view.findViewById(R.id.city_name);
                 cityCard = view.findViewById(R.id.city_card);

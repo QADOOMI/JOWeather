@@ -3,7 +3,7 @@ package com.example.network;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.remoteds.WeatherService;
+import com.example.repo.WeatherService;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;

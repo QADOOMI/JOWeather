@@ -1,4 +1,4 @@
-package com.example.remoteds;
+package com.example.repo;
 
 
 import com.example.database.model.WeatherResponse;
@@ -8,7 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 
-public interface WeatherService extends WeatherMainService {
+public interface WeatherService {
 
     /**
      * @param lat   represent the latitude of city

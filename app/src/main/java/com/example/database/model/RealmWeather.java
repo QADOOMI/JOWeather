@@ -1,6 +1,14 @@
 package com.example.database.model;
 
+import android.util.Log;
+
+import androidx.annotation.DrawableRes;
+
+import com.example.joweather.R;
+
+import app.WeatherApp;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
@@ -36,6 +44,9 @@ public class RealmWeather extends RealmObject {
     // coordination
     private double lat;
     private double lon;
+
+    @Ignore
+    private int cityImage;
 
     public RealmWeather() {
     }
@@ -121,7 +132,7 @@ public class RealmWeather extends RealmObject {
     }
 
     public void setPressure(String pressure) {
-        this.pressure = pressure;
+        this.pressure = pressure + " P";
     }
 
     public void setHumidty(double humidty) {
@@ -138,6 +149,17 @@ public class RealmWeather extends RealmObject {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+        if (cityName.contains("Aqaba")) {
+            cityImage = R.drawable.aqaba;
+
+        } else if (cityName.contains("Amman")) {
+            cityImage = R.drawable.amman;
+
+        } else if (cityName.contains("Irbid")) {
+            cityImage = R.drawable.irbid;
+
+        }
+        Log.e(RealmWeather.class.getSimpleName(), "setCityName: " + cityImage);
     }
 
     public void setWeatherDate(long weatherDate) {
@@ -177,18 +199,13 @@ public class RealmWeather extends RealmObject {
         return "RealmWeather{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
-                ", speed=" + speed +
-                ", deg=" + deg +
-                ", cloud='" + cloud + '\'' +
-                ", temp=" + temp +
-                ", pressure='" + pressure + '\'' +
-                ", humidty=" + humidty +
-                ", minTemp=" + minTemp +
-                ", maxTemp=" + maxTemp +
                 ", cityName='" + cityName + '\'' +
                 ", weatherDate=" + weatherDate +
-                ", lat=" + lat +
-                ", lon=" + lon +
-                '}';
+                '}' + '\n';
+    }
+
+    @DrawableRes
+    public int getCityImage() {
+        return cityImage;
     }
 }

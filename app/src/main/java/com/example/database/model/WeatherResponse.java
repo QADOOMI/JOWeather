@@ -1,6 +1,8 @@
 package com.example.database.model;
 
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -95,6 +97,7 @@ public class WeatherResponse {
     }
 
     public int getId() {
+        Log.e(WeatherResponse.class.getSimpleName(), "getId: " + id);
         return id;
     }
 
@@ -111,16 +114,8 @@ public class WeatherResponse {
     @Override
     public String toString() {
         return "WeatherResponse{" +
-                "coord=" + coord.toString() +
-                ", clouds=" + clouds.toString() +
-                ", sys=" + sys.toString() +
-                ", weather=" + weather.toString() +
-                ", main=" + main.toString() +
-                ", wind=" + wind.toString() +
-                ", dt=" + dt +
                 ", id=" + id +
                 ", name='" + name + '\'' +
-                ", cod=" + cod +
-                '}';
+                '}' + '\n';
     }
 }

@@ -2,9 +2,8 @@ package com.example.model;
 
 import androidx.annotation.StringDef;
 
-import com.example.database.model.WeatherResponse;
-import com.example.network.RetrofitClient;
-import com.example.remoteds.WeatherService;
+import com.example.database.model.RealmWeather;
+import com.example.joweather.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import io.reactivex.Observable;
 
 public class City {
 
