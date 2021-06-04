@@ -11,7 +11,7 @@ public interface DataSourceController {
 
     }
 
-    default void onMultipleWeatherInserted() {
+    default void onMultipleWeatherInserted(List<RealmWeather> weathers) {
 
     }
 
@@ -28,6 +28,10 @@ public interface DataSourceController {
     }
 
     default void onCitiesWeatherFetched(List<WeatherResponse> weatherResponses) {
+
+    }
+
+    default void noNewDataAvailable() {
 
     }
 }

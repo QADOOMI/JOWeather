@@ -1,11 +1,17 @@
 package com.example.views;
 
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.database.model.RealmWeather;
 import com.example.joweather.databinding.CityItemLayoutBinding;
 
@@ -29,7 +35,7 @@ public final class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.City
                 LayoutInflater.from(parent.getContext()), parent, false
         );
 
-        return new CityHolder(binding);
+        return new CityHolder(binding, activity);
     }
 
     @Override
@@ -50,15 +56,33 @@ public final class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.City
 
     public static class CityHolder extends RecyclerView.ViewHolder {
 
+        private final AppCompatImageView image;
+        private final AppCompatActivity activity;
         private CityItemLayoutBinding binding;
 
-        public CityHolder(@NonNull CityItemLayoutBinding binding) {
+        public CityHolder(@NonNull CityItemLayoutBinding binding, AppCompatActivity appCompatActivity) {
             super(binding.getRoot());
+
+            this.activity = appCompatActivity;
+
+            image = binding.cityImage;
             this.binding = binding;
         }
 
         public void bindRealmWeather(@NonNull RealmWeather realmWeather) {
             binding.setWeatherItem(realmWeather);
+            Glide.with(image.getContext())
+                    .asDrawable()
+                    .load(realmWeather.getCityImage())
+                    .dontAnimate()
+                    .override(image.getWidth(), image.getHeight())
+                    .dontTransform()
+                    .centerCrop()
+                    .encodeFormat(Bitmap.CompressFormat.JPEG)
+                    .skipMemoryCache(false)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .format(DecodeFormat.PREFER_ARGB_8888)
+                    .into(image);
         }
     }
 }

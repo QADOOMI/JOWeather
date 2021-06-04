@@ -115,7 +115,7 @@ public class WeatherResponse {
     public String toString() {
         return "WeatherResponse{" +
                 ", id=" + id +
-                ", name='" + name + '\'' +
+                ", wind='" + wind.toString() + '\'' +
                 '}' + '\n';
     }
 }

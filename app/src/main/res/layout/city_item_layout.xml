@@ -13,7 +13,7 @@
         android:id="@+id/city_card"
         style="@style/CityCardStyle"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/image_height"
         android:layout_margin="8dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="8dp"
@@ -25,8 +25,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/city_image"
             android:scaleType="centerCrop"
-            android:transitionName="@string/city_image_transition_text"
-            app:imageResource="@{() -> weatherItem.getCityImage()}" />
+            android:transitionName="@string/city_image_transition_text" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -75,54 +74,42 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/city_temp" />
 
-            <!-- <androidx.appcompat.widget.AppCompatTextView
-                 android:id="@+id/city_wind"
-                 android:layout_width="wrap_content"
-                 android:layout_height="0dp"
-                 android:text="@{Double.toString(weatherItem.speed)}"
-                 android:textAlignment="textEnd"
-                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                 android:textColor="@color/white"
-                 android:textSize="@dimen/city_title_text_size"
-                 android:textStyle="bold"
-                 app:layout_constraintBottom_toTopOf="@id/city_max_temp"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintTop_toBottomOf="@id/city_pressure" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/city_clouds"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@{weatherItem.cloud}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textColor="@color/white"
+                android:textSize="@dimen/city_title_text_size"
+                android:textStyle="bold"
+                app:icon="@drawable/cloud"
+                app:iconGravity="end"
+                app:iconSize="23dp"
+                app:iconTint="@color/blueSky"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/city_pressure" />
 
-             <androidx.appcompat.widget.AppCompatTextView
-                 android:id="@+id/city_max_temp"
-                 android:layout_width="wrap_content"
-                 android:layout_height="0dp"
-                 android:text="@{Double.toString(weatherItem.maxTemp)}"
-                 android:textAlignment="textEnd"
-                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                 android:textColor="@color/white"
-                 android:textSize="@dimen/city_title_text_size"
-                 android:textStyle="bold"
-                 app:layout_constraintBottom_toTopOf="@id/city_min_temp"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintTop_toBottomOf="@id/city_wind" />
-
-             <androidx.appcompat.widget.AppCompatTextView
-                 android:id="@+id/city_min_temp"
-                 android:layout_width="wrap_content"
-                 android:layout_height="0dp"
-                 android:text="@{Double.toString(weatherItem.minTemp)}"
-                 android:textAlignment="textEnd"
-                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                 android:textColor="@color/white"
-                 android:textSize="@dimen/city_title_text_size"
-                 android:textStyle="bold"
-                 app:layout_constraintBottom_toBottomOf="parent"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintTop_toBottomOf="@id/city_max_temp" />
- -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/city_wind"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text='@{String.format("%2.2f m/s", weatherItem.speed)}'
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textColor="@color/white"
+                android:textSize="@dimen/city_title_text_size"
+                android:textStyle="bold"
+                app:icon="@drawable/wind"
+                app:iconGravity="end"
+                app:iconSize="23dp"
+                app:iconTint="@color/blueSky"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/city_clouds" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </com.google.android.material.card.MaterialCardView>
-
 </layout>

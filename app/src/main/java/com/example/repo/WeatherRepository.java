@@ -24,6 +24,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Case;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 public final class WeatherRepository {
 
@@ -35,8 +37,10 @@ public final class WeatherRepository {
 
     private static final String TAG = "WeatherRepository";
 
-    private WeatherRepository(DataSourceController controller) {
+    public WeatherRepository(DataSourceController controller) {
+        Log.e(TAG, "WeatherRepository: setting listener");
         this.sourceController = controller;
+        System.out.println("controller = " + controller);
 
         realmCreator = RealmCreator.newInstance();
         weatherService = RetrofitClient.INSTANCE
@@ -44,28 +48,17 @@ public final class WeatherRepository {
                 .createService(WeatherService.class);
     }
 
-    public static WeatherRepository getInstance(@NonNull DataSourceController remoteController) {
-        if (repository == null) {
-            synchronized (WeatherRepository.class) {
-                if (repository == null) {
-                    repository = new WeatherRepository(remoteController);
-                }
-            }
-        }
-
-        return repository;
-    }
-
     public void insertOrUpdate(@NonNull WeatherResponse weatherResponse) {
         Log.e(TAG, "loadWeatherInfo finished = " + weatherResponse.toString());
         Log.e(TAG, "loadAndSaveWeatherInfo: inserting weather...");
 
-        realmCreator.executeAsync(realm ->
-                        realm.insertOrUpdate(new IRealmWeatherBuilder.RealmWeatherBuilder(weatherResponse)
-                                .build())
-                , () -> {
+        RealmWeather realmWeather = new IRealmWeatherBuilder.RealmWeatherBuilder(weatherResponse)
+                .build();
+
+        realmCreator.executeAsync(realm -> realm.insertOrUpdate(realmWeather),
+                () -> {
                     Log.e(TAG, "loadAndSaveWeatherInfo: SUCCESS");
-                    sourceController.onMultipleWeatherInserted();
+                    sourceController.newWeatherInfoInserted(realmWeather);
                 },
                 error -> {
                     Log.e(TAG, "loadAndSaveWeatherInfo: Error, ", error);
@@ -85,10 +78,17 @@ public final class WeatherRepository {
 
         Log.e(TAG, "insertOrUpdate: " + weathers.toString());
 
+        realmCreator.where(RealmWeather.class)
+                .findAllAsync()
+                .addChangeListener((RealmChangeListener<RealmResults<RealmWeather>>) results -> {
+                    sourceController.onMultipleWeatherInserted(results);
+                    Log.v("Testing", "The size is: " + results.size());
+                });
+
         realmCreator.executeAsync(realm -> realm.insertOrUpdate(weathers)
                 , () -> {
                     Log.e(TAG, "loadAndSaveWeatherInfo: SUCCESS");
-                    sourceController.onMultipleWeatherInserted();
+                    sourceController.onMultipleWeatherInserted(weathers);
                 },
                 error -> {
                     Log.e(TAG, "loadAndSaveWeatherInfo: Error, ", error);
@@ -119,31 +119,8 @@ public final class WeatherRepository {
         if (realmObj instanceof RealmWeather)
             realmWeather = ((RealmWeather) realmObj);
 
-        if (realmWeather != null) {
-            Log.e(TAG, "firstAsFlowable data size: " + realmWeather.toString());
-            realmWeather.addChangeListener((realmWeathers1, changeSet) -> {
-                Log.e(TAG, "firstAsFlowable, isDeleted: " + changeSet.isDeleted());
-                if (changeSet.getChangedFields().length > 0)
-                    sourceController.newWeatherInfoInserted(((RealmWeather) realmWeathers1));
-            });
-
-        } else
-            Log.e(TAG, "firstAsFlowable: weather is null");
-
         return realmWeather;
     }
-
-//    private RealmWeather getRealmWeatherFrom(RealmResults<RealmWeather> realmWeather) {
-//        return LiveDataReactiveStreams.fromPublisher(realmWeather.asFlowable()
-//                .filter(RealmResults::isLoaded)
-//                .map(realmWeathers2 -> {
-//                    Log.e(TAG, "handleCityInfo: " + realmWeathers2.toString());
-//                    return realmWeathers2;
-//                })
-//                .flatMapIterable((Function<RealmResults<RealmWeather>, Iterable<RealmWeather>>) realmWeathers2 ->
-//                        realmWeathers2.subList(0, realmWeathers2.size() - 1))
-//        ).getValue();
-//    }
 
     public Disposable loadAndSaveWeatherInfo() {
         List<Observable<WeatherResponse>> citiesInfoOps = getCitiesWeather(weatherService);
@@ -154,7 +131,10 @@ public final class WeatherRepository {
                 .observeOn(AndroidSchedulers.mainThread())
                 .toList()
                 .subscribe(this::insertOrUpdate
-                        , throwable -> sourceController.onRemoteSourceError(throwable));
+                        , throwable -> {
+                            sourceController.onRemoteSourceError(throwable);
+                            Log.e(TAG, "loadAndSaveWeatherInfo: ", throwable);
+                        });
     }
 
     public static List<Observable<WeatherResponse>> getCitiesWeather(WeatherService client) {

@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.database.model.RealmWeather;
 import com.example.database.model.WeatherResponse;
+import com.example.model.WeatherError;
 import com.example.repo.WeatherRepository;
 
 import java.util.ArrayList;
@@ -23,13 +24,16 @@ public class JoWeatherViewModel extends AndroidViewModel
 
     private WeatherRepository repository;
 
+    private MutableLiveData<List<RealmWeather>> weathers = new MutableLiveData<>(new ArrayList<>());
+    private MutableLiveData<WeatherError> errorHappen = new MutableLiveData<>();
+
     private static volatile JoWeatherViewModel INSTANCE;
 
     private static final String TAG = "JoWeatherViewModel";
 
     public JoWeatherViewModel(@NonNull WeatherApp application) {
         super(application);
-        repository = WeatherRepository.getInstance(this);
+        repository = new WeatherRepository(this);
     }
 
     public static JoWeatherViewModel getInstance(WeatherApp app) {
@@ -58,18 +62,49 @@ public class JoWeatherViewModel extends AndroidViewModel
     @Override
     public void onLocalSourceError(Throwable throwable) {
         Log.e(TAG, "onLocalSourceError: ", throwable);
+        errorHappen.postValue(new WeatherError(throwable.getMessage(), true));
     }
 
     @Override
     public void onRemoteSourceError(Throwable throwable) {
         Log.e(TAG, "onRemoteSourceError: ", throwable);
+        errorHappen.postValue(new WeatherError(throwable.getMessage(), false));
     }
 
     @Override
-    public void onMultipleWeatherInserted() {
-        Log.e(TAG, "onWeatherInserted: ");
+    public void onMultipleWeatherInserted(List<RealmWeather> weathers) {
+        Log.e(TAG, "onWeatherInserted: " + weathers.size());
+        if (weathers != null && weathers.size() > 0) {
+            this.weathers.postValue(weathers);
+        }
     }
 
+    @Override
+    public void newWeatherInfoInserted(RealmWeather realmModel) {
+        Log.e(MainActivityViewModel.class.getSimpleName(), "newWeatherInfoInserted: " + realmModel.toString());
+        if (weathers.getValue().size() > 0) {
+            int i = 0;
+            for (RealmWeather weather : weathers.getValue()) {
+                if (realmModel.getId() == weather.getId()) {
+                    weathers.getValue().set(i, realmModel);
+                    break;
+                }
+                i++;
+            }
+        } else {
+            weathers.getValue().add(realmModel);
+        }
+
+        weathers.postValue(weathers.getValue());
+    }
+
+    public MutableLiveData<List<RealmWeather>> getWeathers() {
+        return weathers;
+    }
+
+    public MutableLiveData<WeatherError> getErrorHappen() {
+        return errorHappen;
+    }
 
     @Override // remote data source
     public void onCitiesWeatherFetched(List<WeatherResponse> weatherResponses) {

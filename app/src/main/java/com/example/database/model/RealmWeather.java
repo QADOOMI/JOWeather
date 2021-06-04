@@ -6,7 +6,6 @@ import androidx.annotation.DrawableRes;
 
 import com.example.joweather.R;
 
-import app.WeatherApp;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
@@ -206,6 +205,12 @@ public class RealmWeather extends RealmObject {
 
     @DrawableRes
     public int getCityImage() {
-        return cityImage;
+        if (cityName.contains("Amman"))
+            return R.drawable.amman;
+        else if (cityName.contains("Irbid"))
+            return R.drawable.irbid;
+        else
+            return R.drawable.aqaba;
     }
+
 }

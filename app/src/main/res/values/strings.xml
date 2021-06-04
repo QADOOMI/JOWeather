@@ -8,5 +8,7 @@
     <string name="desc_label_text">In General</string>
     <string name="city_image">city image</string>
     <string name="weather_icon">weather icon</string>
+    <string name="error_message">Something Went Wrong, Please Try Again.</string>
+    <string name="check_internet_msg">Please Check your internet connection</string>
 
 </resources>
